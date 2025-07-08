@@ -430,9 +430,6 @@
         </div>
     </div>
 
-    <div class="compare-section"><button class="compare-button" onclick="compareCharacters()">Compare Characters</button></div>
-
-
     <script>
         function calculateSTRDamage(str) {
             if (str <= 2) return "--";
@@ -582,12 +579,6 @@
 
             document.getElementById('comparison-content').innerHTML = resultsHTML;
             document.getElementById('results').style.display = 'block';
-
-            const elementsToModify = document.querySelectorAll('.compare-section');
-            elementsToModify.forEach(element => {
-              element.setAttribute('style', 'display: none;');
-            });
-
         }
 
         function importCharacter(num) {
