@@ -300,6 +300,10 @@
                 <input type="number" id="dcv1" value="3">
             </div>
             <div class="input-group">
+                <label for="ocvbonus1">OCV Bonus:</label>
+                <input type="number" id="ocvbonus1" value="0">
+            </div>
+            <div class="input-group">
                 <label for="dcvbonus1">DCV Bonus:</label>
                 <input type="number" id="dcvbonus1" value="0">
             </div>
@@ -376,6 +380,10 @@
             <div class="input-group">
                 <label for="dcv2">DCV:</label>
                 <input type="number" id="dcv2" value="3">
+            </div>
+            <div class="input-group">
+                <label for="ocvbonus2">OCV Bonus:</label>
+                <input type="number" id="ocvbonus2" value="0">
             </div>
             <div class="input-group">
                 <label for="dcvbonus2">DCV Bonus:</label>
@@ -484,6 +492,7 @@
                 con: parseInt(document.getElementById(`con${num}`).value) || 0,
                 ocv: parseInt(document.getElementById(`ocv${num}`).value) || 0,
                 dcv: parseInt(document.getElementById(`dcv${num}`).value) || 0,
+                ocvBonus: parseInt(document.getElementById(`ocvbonus${num}`).value) || 0,
                 dcvBonus: parseInt(document.getElementById(`dcvbonus${num}`).value) || 0,
                 omcv: parseInt(document.getElementById(`omcv${num}`).value) || 0,
                 dmcv: parseInt(document.getElementById(`dmcv${num}`).value) || 0,
@@ -502,13 +511,17 @@
             const char1 = getCharacterData(1);
             const char2 = getCharacterData(2);
 
+            // Calculate effective OCV (including bonus)
+            const char1EffectiveOCV = char1.ocv + char1.ocvBonus;
+            const char2EffectiveOCV = char2.ocv + char2.ocvBonus;
+
             // Calculate effective DCV (including bonus)
             const char1EffectiveDCV = char1.dcv + char1.dcvBonus;
             const char2EffectiveDCV = char2.dcv + char2.dcvBonus;
 
             // Calculate hit rolls
-            const char1HitsChar2Physical = calculateHitRoll(char1.ocv, char2EffectiveDCV);
-            const char2HitsChar1Physical = calculateHitRoll(char2.ocv, char1EffectiveDCV);
+            const char1HitsChar2Physical = calculateHitRoll(char1EffectiveOCV, char2EffectiveDCV);
+            const char2HitsChar1Physical = calculateHitRoll(char2EffectiveOCV, char1EffectiveDCV);
             const char1HitsChar2Mental = calculateHitRoll(char1.omcv, char2.dmcv);
             const char2HitsChar1Mental = calculateHitRoll(char2.omcv, char1.dmcv);
 
@@ -531,7 +544,7 @@
                         <h4>${char1.name} attacking ${char2.name}</h4>
                         <div class="combat-stats">
                             <div class="stat-group">
-                                <span class="stat-label">Physical Attack (OCV ${char1.ocv} vs DCV ${char2EffectiveDCV}):</span><br>
+                                <span class="stat-label">Physical Attack (OCV ${char1EffectiveOCV} vs DCV ${char2EffectiveDCV}):</span><br>
                                 Needs to roll: <strong>${char1HitsChar2Physical}</strong><br>
                                 Damage: <strong>${char1Damage} - ${char2.pd}PD/${char2.ed}ED&nbsp;&nbsp;&nbsp;&nbsp;( ${char2.con} for <i>Stun</i> )</strong>
                             </div>
@@ -555,7 +568,7 @@
                         <h4>${char2.name} attacking ${char1.name}</h4>
                         <div class="combat-stats">
                             <div class="stat-group">
-                                <span class="stat-label">Physical Attack (OCV ${char2.ocv} vs DCV ${char1EffectiveDCV}):</span><br>
+                                <span class="stat-label">Physical Attack (OCV ${char2EffectiveOCV} vs DCV ${char1EffectiveDCV}):</span><br>
                                 Needs to roll: <strong>${char2HitsChar1Physical}</strong><br>
                                 Damage: <strong>${char2Damage}  - ${char1.pd}PD/${char1.ed}ED&nbsp;&nbsp;&nbsp;&nbsp;( ${char1.con} for <i>Stun</i> )</strong>
                             </div>
@@ -600,6 +613,7 @@
                     'con': 10,
                     'ocv': 3,
                     'dcv': 3,
+                    'ocvbonus': 0,
                     'dcvbonus': 0,
                     'omcv': 3,
                     'dmcv': 3,
@@ -686,6 +700,7 @@
             con1: 10,
             ocv1: 3,
             dcv1: 3,
+            ocvbonus1: 0,
             dcvbonus1: 0,
             omcv1: 3,
             dmcv1: 3,
@@ -705,6 +720,7 @@
             con2: 10,
             ocv2: 3,
             dcv2: 3,
+            ocvbonus2: 0,
             dcvbonus2: 0,
             omcv2: 3,
             dmcv2: 3,
@@ -721,7 +737,7 @@
 
     // Save character data to localStorage
     function saveCharacterData(characterNum) {
-        const fields = ['name', 'str', 'dex', 'con', 'ocv', 'dcv', 'dcvbonus',
+        const fields = ['name', 'str', 'dex', 'con', 'ocv', 'dcv', 'ocvbonus', 'dcvbonus',
                        'omcv', 'dmcv', 'spd', 'pd', 'ed', 'rec', 'end', 'body', 'stun', 'running'];
 
         const characterData = {};
