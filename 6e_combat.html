@@ -5,17 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HERO System 6e Combat Comparison Tool</title>
     <style>
+        :root {
+            /* Light theme colors */
+            --bg-primary: #f5f5f5;
+            --bg-secondary: white;
+            --bg-tertiary: #f9f9f9;
+            --bg-quaternary: #e8f4f8;
+            --bg-defensive: #f0f0f0;
+
+            --text-primary: #333;
+            --text-secondary: #444;
+            --text-tertiary: #555;
+            --text-accent: #2c5aa0;
+
+            --border-color: #ddd;
+            --shadow: rgba(0,0,0,0.1);
+
+            --button-bg: #2c5aa0;
+            --button-hover: #1e3d6f;
+            --button-success: #4CAF50;
+            --button-success-hover: #45a049;
+        }
+
+        [data-theme="dark"] {
+            /* Dark theme colors */
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --bg-tertiary: #242424;
+            --bg-quaternary: #1e3347;
+            --bg-defensive: #363636;
+
+            --text-primary: #e0e0e0;
+            --text-secondary: #d0d0d0;
+            --text-tertiary: #b0b0b0;
+            --text-accent: #5a9fd4;
+
+            --border-color: #444;
+            --shadow: rgba(0,0,0,0.3);
+
+            --button-bg: #3a7bc8;
+            --button-hover: #2e5fa2;
+            --button-success: #5cb85c;
+            --button-success-hover: #4cae4c;
+        }
+
+        /* Theme toggle styles */
+        .theme-toggle-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px var(--shadow);
+        }
+
+        .theme-toggle .sun-icon {
+            display: inline;
+        }
+
+        .theme-toggle .moon-icon {
+            display: none;
+        }
+
+        [data-theme="dark"] .theme-toggle .sun-icon {
+            display: none;
+        }
+
+        [data-theme="dark"] .theme-toggle .moon-icon {
+            display: inline;
+        }
+
+        /* Updated existing styles with CSS variables */
         body {
             font-family: Arial, sans-serif;
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         h1 {
             text-align: center;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .add_info {
@@ -31,16 +118,17 @@
         .character-card {
             flex: 1;
             min-width: 300px;
-            background: white;
+            background: var(--bg-secondary);
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px var(--shadow);
+            transition: background-color 0.3s ease;
         }
 
         .character-card h2 {
             margin-top: 0;
-            color: #444;
-            border-bottom: 2px solid #ddd;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border-color);
             padding-bottom: 10px;
         }
 
@@ -52,56 +140,63 @@
             display: inline-block;
             width: 100px;
             font-weight: bold;
-            color: #555;
+            color: var(--text-tertiary);
         }
 
         input {
             width: 150px;
             padding: 5px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .results {
             margin-top: 30px;
-            background: #f9f9f9;
+            background: var(--bg-tertiary);
             padding: 20px;
             border-radius: 8px;
+            transition: background-color 0.3s ease;
         }
 
         .results h3 {
             margin-top: 0;
-            color: #333;
+            color: var(--text-primary);
         }
 
         .combat-stats {
-            background: #e8f4f8;
+            background: var(--bg-quaternary);
             padding: 15px;
             border-radius: 6px;
             margin-bottom: 15px;
+            transition: background-color 0.3s ease;
         }
 
         .stat-group {
             margin: 10px 0;
             padding: 10px;
-            background: white;
+            background: var(--bg-secondary);
             border-radius: 4px;
+            transition: background-color 0.3s ease;
         }
 
         .stat-label {
             font-weight: bold;
-            color: #2c5aa0;
+            color: var(--text-accent);
         }
 
         .defensive-stats {
-            background: #f0f0f0;
+            background: var(--bg-defensive);
             padding: 10px;
             border-radius: 4px;
             margin-top: 10px;
+            transition: background-color 0.3s ease;
         }
 
         button {
-            background: #2c5aa0;
+            background: var(--button-bg);
             color: white;
             border: none;
             padding: 10px 20px;
@@ -110,41 +205,51 @@
             font-size: 16px;
             margin-top: 10px;
             width: 100%;
+            transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background: #1e3d6f;
+            background: var(--button-hover);
         }
 
         textarea {
             width: 100%;
             height: 100px;
             padding: 5px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             font-family: monospace;
             font-size: 12px;
             margin-top: 5px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .import-section {
             margin-top: 15px;
             padding-top: 15px;
-            border-top: 2px solid #ddd;
+            border-top: 2px solid var(--border-color);
         }
 
         .import-button {
-            background: #4CAF50;
+            background: var(--button-success);
             margin-top: 5px;
         }
 
         .import-button:hover {
-            background: #45a049;
+            background: var(--button-success-hover);
         }
     </style>
 </head>
 <body>
     <h1>HERO System 6e Combat Comparison Tool</h1>
+    <div class="theme-toggle-container">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+            <span class="sun-icon">☀️</span>
+            <span class="moon-icon">🌙</span>
+        </button>
+    </div>
 
     <div id="results" class="results" style="display: none;">
         <h3>Combat Comparison Results</h3>
@@ -522,6 +627,36 @@
                 }
             });
         });
+
+        // Check for saved theme preference or default to 'light' mode
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', currentTheme);
+
+    // Get the theme toggle button
+    const themeToggle = document.getElementById('theme-toggle');
+
+    // Add click event listener to the toggle button
+    themeToggle.addEventListener('click', function() {
+        // Get the current theme
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+
+        // Switch to the opposite theme
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+        // Apply the new theme
+        document.documentElement.setAttribute('data-theme', newTheme);
+
+        // Save the preference to localStorage
+        localStorage.setItem('theme', newTheme);
+    });
+
+    // Optional: Add keyboard shortcut (Ctrl/Cmd + Shift + D) to toggle theme
+    document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'D') {
+            e.preventDefault();
+            themeToggle.click();
+        }
+    });
     </script>
 </body>
 </html>
