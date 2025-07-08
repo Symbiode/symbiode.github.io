@@ -244,6 +244,17 @@
         .import-button:hover {
             background: var(--button-success-hover);
         }
+
+        .reset-button {
+            background: #662d91;
+            margin-top: 5px;
+            width: 30%;
+        }
+
+        .compare-button {
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -255,10 +266,11 @@
         </button>
     </div>
 
-    <div id="results" class="results" style="display: none;">
-        <h3>Combat Comparison Results</h3>
-        <div id="comparison-content"></div>
+    <div id="results" class="results" >
+        <div id="comparison-content">    <button class="compare-button" onclick="compareCharacters()">Compare Characters</button>
+</div>
     </div>
+
 
     <div class="container">
         <div class="character-card">
@@ -331,6 +343,7 @@
                 <label for="running1">Running:</label>
                 <input type="number" id="running1" value="12">
             </div>
+            <button onclick="resetCharacterToDefaults(1)" class="reset-button">Reset to Default</button>
             <div class="import-section">
                 <label class="long-label">Import JSON:</label>
                 <textarea id="json1" placeholder='{"name":"Hero","str":20,"con":15,"ocv":6,"dcv":6,"dcvbonus":2,"omcv":5,"dmcv":5,"pd":8,"ed":8,"rec":10,"end":40,"body":15,"stun":35}'></textarea>
@@ -408,6 +421,7 @@
                 <label for="running2">Running:</label>
                 <input type="number" id="running2" value="12">
             </div>
+            <button onclick="resetCharacterToDefaults(2)" class="reset-button">Reset to Default</button>
             <div class="import-section">
                 <label class="long-label">Import JSON:</label>
                 <textarea id="json2" placeholder='{"name":"Villain","str":25,"con":20,"ocv":7,"dcv":5,"dcvbonus":0,"omcv":4,"dmcv":4,"pd":10,"ed":10,"rec":12,"end":50,"body":20,"stun":40}'></textarea>
@@ -416,7 +430,8 @@
         </div>
     </div>
 
-    <button onclick="compareCharacters()">Compare Characters</button>
+    <div class="compare-section"><button class="compare-button" onclick="compareCharacters()">Compare Characters</button></div>
+
 
     <script>
         function calculateSTRDamage(str) {
@@ -513,6 +528,7 @@
             if (char2.dex > char1.dex) char2GoesFirst = "*";
 
             const resultsHTML = `
+            <h3>Combat Comparison Results</h3>
                 <div style="display: flex; gap: 20px; flex-wrap: wrap;">
                     <div style="flex: 1; min-width: 300px;">
                         <h4>${char1.name} attacking ${char2.name}</h4>
@@ -566,6 +582,12 @@
 
             document.getElementById('comparison-content').innerHTML = resultsHTML;
             document.getElementById('results').style.display = 'block';
+
+            const elementsToModify = document.querySelectorAll('.compare-section');
+            elementsToModify.forEach(element => {
+              element.setAttribute('style', 'display: none;');
+            });
+
         }
 
         function importCharacter(num) {
@@ -611,6 +633,8 @@
                         }
                     }
                 }
+
+                saveCharacterData(num);
 
                 // Auto-update comparison if already displayed
                 if (document.getElementById('results').style.display !== 'none') {
@@ -661,6 +685,149 @@
             themeToggle.click();
         }
     });
+
+    // Default values for characters
+    const defaultValues = {
+        character1: {
+            name1: '',
+            str1: 10,
+            dex1: 10,
+            con1: 10,
+            ocv1: 3,
+            dcv1: 3,
+            dcvbonus1: 0,
+            omcv1: 3,
+            dmcv1: 3,
+            spd1: 2,
+            pd1: 2,
+            ed1: 2,
+            rec1: 4,
+            end1: 20,
+            body1: 10,
+            stun1: 20,
+            running1: 12
+        },
+        character2: {
+            name2: '',
+            str2: 10,
+            dex2: 10,
+            con2: 10,
+            ocv2: 3,
+            dcv2: 3,
+            dcvbonus2: 0,
+            omcv2: 3,
+            dmcv2: 3,
+            spd2: 2,
+            pd2: 2,
+            ed2: 2,
+            rec2: 4,
+            end2: 20,
+            body2: 10,
+            stun2: 20,
+            running2: 12
+        }
+    };
+
+    // Save character data to localStorage
+    function saveCharacterData(characterNum) {
+        const fields = ['name', 'str', 'dex', 'con', 'ocv', 'dcv', 'dcvbonus',
+                       'omcv', 'dmcv', 'spd', 'pd', 'ed', 'rec', 'end', 'body', 'stun', 'running'];
+
+        const characterData = {};
+
+        fields.forEach(field => {
+            const element = document.getElementById(field + characterNum);
+            if (element) {
+                characterData[field] = element.type === 'number' ?
+                    parseInt(element.value) || 0 : element.value;
+            }
+        });
+
+        localStorage.setItem(`character${characterNum}`, JSON.stringify(characterData));
+    }
+
+    // Load character data from localStorage
+    function loadCharacterData(characterNum) {
+        const savedData = localStorage.getItem(`character${characterNum}`);
+
+        if (savedData) {
+            try {
+                const characterData = JSON.parse(savedData);
+
+                Object.keys(characterData).forEach(field => {
+                    const element = document.getElementById(field + characterNum);
+                    if (element) {
+                        element.value = characterData[field];
+                    }
+                });
+            } catch (e) {
+                console.error('Error loading character data:', e);
+            }
+        }
+    }
+
+    // Save all characters data
+    function saveAllCharacters() {
+        saveCharacterData(1);
+        saveCharacterData(2);
+    }
+
+    // Load all characters data
+    function loadAllCharacters() {
+        loadCharacterData(1);
+        loadCharacterData(2);
+    }
+
+    // Reset character to defaults
+    function resetCharacterToDefaults(characterNum) {
+        const defaults = defaultValues[`character${characterNum}`];
+
+        Object.keys(defaults).forEach(fieldId => {
+            const element = document.getElementById(fieldId);
+            if (element) {
+                element.value = defaults[fieldId];
+            }
+        });
+
+        // Save the reset values to localStorage
+        saveCharacterData(characterNum);
+    }
+
+          // Reset all characters to defaults
+      function resetAllToDefaults() {
+          if (confirm('Are you sure you want to reset all characters to default values?')) {
+              resetCharacterToDefaults(1);
+              resetCharacterToDefaults(2);
+
+              // Clear the JSON import textareas
+              document.getElementById('json1').value = '';
+              document.getElementById('json2').value = '';
+          }
+      }
+
+      // Initialize - Add event listeners and load saved data
+      document.addEventListener('DOMContentLoaded', function() {
+          // Add change event listeners to all input fields
+          const allInputs = document.querySelectorAll('input[type="text"], input[type="number"]');
+
+          allInputs.forEach(input => {
+              input.addEventListener('change', function() {
+                  // Determine which character this input belongs to
+                  const characterNum = this.id.slice(-1);
+                  saveCharacterData(characterNum);
+              });
+
+              // Also save on input for real-time saving
+              input.addEventListener('input', function() {
+                  const characterNum = this.id.slice(-1);
+                  saveCharacterData(characterNum);
+              });
+          });
+
+          // Load saved data when page loads
+          loadAllCharacters();
+      });
+
     </script>
 </body>
 </html>
