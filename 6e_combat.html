@@ -143,6 +143,10 @@
             color: var(--text-tertiary);
         }
 
+        .long-label {
+            width: 200px;
+        }
+
         input {
             width: 150px;
             padding: 5px;
@@ -328,7 +332,7 @@
                 <input type="number" id="running1" value="12">
             </div>
             <div class="import-section">
-                <label>Import JSON:</label>
+                <label class="long-label">Import JSON:</label>
                 <textarea id="json1" placeholder='{"name":"Hero","str":20,"con":15,"ocv":6,"dcv":6,"dcvbonus":2,"omcv":5,"dmcv":5,"pd":8,"ed":8,"rec":10,"end":40,"body":15,"stun":35}'></textarea>
                 <button class="import-button" onclick="importCharacter(1)">Import Character 1</button>
             </div>
@@ -405,7 +409,7 @@
                 <input type="number" id="running2" value="12">
             </div>
             <div class="import-section">
-                <label>Import JSON:</label>
+                <label class="long-label">Import JSON:</label>
                 <textarea id="json2" placeholder='{"name":"Villain","str":25,"con":20,"ocv":7,"dcv":5,"dcvbonus":0,"omcv":4,"dmcv":4,"pd":10,"ed":10,"rec":12,"end":50,"body":20,"stun":40}'></textarea>
                 <button class="import-button" onclick="importCharacter(2)">Import Character 2</button>
             </div>
