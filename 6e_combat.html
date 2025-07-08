@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HERO System 6e Combat Comparison Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .add_info {
+            text-align: center;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .character-card {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .character-card h2 {
+            margin-top: 0;
+            color: #444;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input {
+            width: 150px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .results {
+            margin-top: 30px;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .results h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .combat-stats {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .stat-group {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .stat-label {
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+
+        .defensive-stats {
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        button {
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        button:hover {
+            background: #1e3d6f;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .import-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #ddd;
+        }
+
+        .import-button {
+            background: #4CAF50;
+            margin-top: 5px;
+        }
+
+        .import-button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>HERO System 6e Combat Comparison Tool</h1>
+
+    <div id="results" class="results" style="display: none;">
+        <h3>Combat Comparison Results</h3>
+        <div id="comparison-content"></div>
+    </div>
+
+    <div class="container">
+        <div class="character-card">
+            <h2>Character 1</h2>
+            <div class="input-group">
+                <label for="name1">Name:</label>
+                <input type="text" id="name1" placeholder="Enter name">
+            </div>
+            <div class="input-group">
+                <label for="str1">STR:</label>
+                <input type="number" id="str1" value="10">
+            </div>
+            <div class="input-group">
+                <label for="dex1">DEX:</label>
+                <input type="number" id="dex1" value="10">
+            </div>
+            <div class="input-group">
+                <label for="con1">CON:</label>
+                <input type="number" id="con1" value="10">
+            </div>
+            <div class="input-group">
+                <label for="ocv1">OCV:</label>
+                <input type="number" id="ocv1" value="3">
+            </div>
+            <div class="input-group">
+                <label for="dcv1">DCV:</label>
+                <input type="number" id="dcv1" value="3">
+            </div>
+            <div class="input-group">
+                <label for="dcvbonus1">DCV Bonus:</label>
+                <input type="number" id="dcvbonus1" value="0">
+            </div>
+            <div class="input-group">
+                <label for="omcv1">OMCV:</label>
+                <input type="number" id="omcv1" value="3">
+            </div>
+            <div class="input-group">
+                <label for="dmcv1">DMCV:</label>
+                <input type="number" id="dmcv1" value="3">
+            </div>
+            <div class="input-group">
+                <label for="spd1">SPD:</label>
+                <input type="number" id="spd1" value="2">
+            </div>
+            <div class="input-group">
+                <label for="pd1">PD:</label>
+                <input type="number" id="pd1" value="2">
+            </div>
+            <div class="input-group">
+                <label for="ed1">ED:</label>
+                <input type="number" id="ed1" value="2">
+            </div>
+            <div class="input-group">
+                <label for="rec1">REC:</label>
+                <input type="number" id="rec1" value="4">
+            </div>
+            <div class="input-group">
+                <label for="end1">END:</label>
+                <input type="number" id="end1" value="20">
+            </div>
+            <div class="input-group">
+                <label for="body1">BODY:</label>
+                <input type="number" id="body1" value="10">
+            </div>
+            <div class="input-group">
+                <label for="stun1">STUN:</label>
+                <input type="number" id="stun1" value="20">
+            </div>
+            <div class="input-group">
+                <label for="running1">Running:</label>
+                <input type="number" id="running1" value="12">
+            </div>
+            <div class="import-section">
+                <label>Import JSON:</label>
+                <textarea id="json1" placeholder='{"name":"Hero","str":20,"con":15,"ocv":6,"dcv":6,"dcvbonus":2,"omcv":5,"dmcv":5,"pd":8,"ed":8,"rec":10,"end":40,"body":15,"stun":35}'></textarea>
+                <button class="import-button" onclick="importCharacter(1)">Import Character 1</button>
+            </div>
+        </div>
+
+        <div class="character-card">
+            <h2>Character 2</h2>
+            <div class="input-group">
+                <label for="name2">Name:</label>
+                <input type="text" id="name2" placeholder="Enter name">
+            </div>
+            <div class="input-group">
+                <label for="str2">STR:</label>
+                <input type="number" id="str2" value="10">
+            </div>
+            <div class="input-group">
+                <label for="dex2">DEX:</label>
+                <input type="number" id="dex2" value="10">
+            </div>
+            <div class="input-group">
+                <label for="con2">CON:</label>
+                <input type="number" id="con2" value="10">
+            </div>
+            <div class="input-group">
+                <label for="ocv2">OCV:</label>
+                <input type="number" id="ocv2" value="3">
+            </div>
+            <div class="input-group">
+                <label for="dcv2">DCV:</label>
+                <input type="number" id="dcv2" value="3">
+            </div>
+            <div class="input-group">
+                <label for="dcvbonus2">DCV Bonus:</label>
+                <input type="number" id="dcvbonus2" value="0">
+            </div>
+            <div class="input-group">
+                <label for="omcv2">OMCV:</label>
+                <input type="number" id="omcv2" value="3">
+            </div>
+            <div class="input-group">
+                <label for="dmcv2">DMCV:</label>
+                <input type="number" id="dmcv2" value="3">
+            </div>
+            <div class="input-group">
+                <label for="spd2">SPD:</label>
+                <input type="number" id="spd2" value="2">
+            </div>
+            <div class="input-group">
+                <label for="pd2">PD:</label>
+                <input type="number" id="pd2" value="2">
+            </div>
+            <div class="input-group">
+                <label for="ed2">ED:</label>
+                <input type="number" id="ed2" value="2">
+            </div>
+            <div class="input-group">
+                <label for="rec2">REC:</label>
+                <input type="number" id="rec2" value="4">
+            </div>
+            <div class="input-group">
+                <label for="end2">END:</label>
+                <input type="number" id="end2" value="20">
+            </div>
+            <div class="input-group">
+                <label for="body2">BODY:</label>
+                <input type="number" id="body2" value="10">
+            </div>
+            <div class="input-group">
+                <label for="stun2">STUN:</label>
+                <input type="number" id="stun2" value="20">
+            </div>
+            <div class="input-group">
+                <label for="running2">Running:</label>
+                <input type="number" id="running2" value="12">
+            </div>
+            <div class="import-section">
+                <label>Import JSON:</label>
+                <textarea id="json2" placeholder='{"name":"Villain","str":25,"con":20,"ocv":7,"dcv":5,"dcvbonus":0,"omcv":4,"dmcv":4,"pd":10,"ed":10,"rec":12,"end":50,"body":20,"stun":40}'></textarea>
+                <button class="import-button" onclick="importCharacter(2)">Import Character 2</button>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="compareCharacters()">Compare Characters</button>
+
+    <script>
+        function calculateSTRDamage(str) {
+            if (str <= 2) return "--";
+            if (str <= 3) return "½d6";
+            if (str <= 4) return "½d6";
+            if (str <= 7) return "1d6";
+            if (str <= 9) return "1½d6";
+            if (str <= 12) return "2d6";
+            if (str <= 14) return "2½d6";
+            if (str <= 17) return "3d6";
+            if (str <= 19) return "3½d6";
+            if (str <= 22) return "4d6";
+            if (str <= 24) return "4½d6";
+            if (str <= 27) return "5d6";
+            if (str <= 29) return "5½d6";
+            if (str === 30) return "6d6";
+
+            // After 30, +1d6 per 5 STR
+            let baseDice = 6;
+            let additionalDice = Math.floor((str - 30) / 5);
+            return `${baseDice + additionalDice}d6`;
+        }
+
+        function calculatePhases(spd) {
+            if (spd == 1) return "7";
+            if (spd == 2) return "6, 12";
+            if (spd == 3) return "4, 8, 12";
+            if (spd == 4) return "3, 6, 9, 12";
+            if (spd == 5) return "3, 5, 8, 10, 12";
+            if (spd == 6) return "2, 4, 6, 8, 10, 12";
+            if (spd == 7) return "2, 4, 6, 7, 9, 11, 12";
+            if (spd == 8) return "2, 3, 5, 6, 8, 9, 11, 12";
+            if (spd == 9) return "2, 3, 4, 6, 7, 8, 10, 11, 12";
+            if (spd == 10) return "2, 3, 4, 5, 6, 8, 9, 10, 11, 12";
+            if (spd == 11) return "2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12";
+            if (spd >= 12) return "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12";
+            return "--";
+        }
+
+        function calculateHitRoll(attackerCV, defenderCV) {
+            const baseRoll = 11;
+            const modifier = attackerCV - defenderCV;
+            const targetRoll = baseRoll + modifier;
+            return targetRoll > 0 ? `${targetRoll}-` : "Auto-hit";
+        }
+
+        function getCharacterData(num) {
+            return {
+                name: document.getElementById(`name${num}`).value || `Character ${num}`,
+                str: parseInt(document.getElementById(`str${num}`).value) || 0,
+                dex: parseInt(document.getElementById(`dex${num}`).value) || 0,
+                con: parseInt(document.getElementById(`con${num}`).value) || 0,
+                ocv: parseInt(document.getElementById(`ocv${num}`).value) || 0,
+                dcv: parseInt(document.getElementById(`dcv${num}`).value) || 0,
+                dcvBonus: parseInt(document.getElementById(`dcvbonus${num}`).value) || 0,
+                omcv: parseInt(document.getElementById(`omcv${num}`).value) || 0,
+                dmcv: parseInt(document.getElementById(`dmcv${num}`).value) || 0,
+                spd: parseInt(document.getElementById(`spd${num}`).value) || 0,
+                pd: parseInt(document.getElementById(`pd${num}`).value) || 0,
+                ed: parseInt(document.getElementById(`ed${num}`).value) || 0,
+                rec: parseInt(document.getElementById(`rec${num}`).value) || 0,
+                end: parseInt(document.getElementById(`end${num}`).value) || 0,
+                body: parseInt(document.getElementById(`body${num}`).value) || 0,
+                stun: parseInt(document.getElementById(`stun${num}`).value) || 0,
+                running: parseInt(document.getElementById(`running${num}`).value) || 0
+            };
+        }
+
+        function compareCharacters() {
+            const char1 = getCharacterData(1);
+            const char2 = getCharacterData(2);
+
+            // Calculate effective DCV (including bonus)
+            const char1EffectiveDCV = char1.dcv + char1.dcvBonus;
+            const char2EffectiveDCV = char2.dcv + char2.dcvBonus;
+
+            // Calculate hit rolls
+            const char1HitsChar2Physical = calculateHitRoll(char1.ocv, char2EffectiveDCV);
+            const char2HitsChar1Physical = calculateHitRoll(char2.ocv, char1EffectiveDCV);
+            const char1HitsChar2Mental = calculateHitRoll(char1.omcv, char2.dmcv);
+            const char2HitsChar1Mental = calculateHitRoll(char2.omcv, char1.dmcv);
+
+            // Calculate damage
+            const char1Damage = calculateSTRDamage(char1.str);
+            const char2Damage = calculateSTRDamage(char2.str);
+
+            const char1Phases = calculatePhases(char1.spd);
+            const char2Phases = calculatePhases(char2.spd);
+
+            var char1GoesFirst = "";
+            var char2GoesFirst = "";
+            if (char1.dex > char2.dex) char1GoesFirst = "*";
+            if (char2.dex > char1.dex) char2GoesFirst = "*";
+
+            const resultsHTML = `
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <h4>${char1.name} attacking ${char2.name}</h4>
+                        <div class="combat-stats">
+                            <div class="stat-group">
+                                <span class="stat-label">Physical Attack (OCV ${char1.ocv} vs DCV ${char2EffectiveDCV}):</span><br>
+                                Needs to roll: <strong>${char1HitsChar2Physical}</strong><br>
+                                Damage: <strong>${char1Damage} - ${char2.pd}PD/${char2.ed}ED&nbsp;&nbsp;&nbsp;&nbsp;( ${char2.con} for <i>Stun</i> )</strong>
+                            </div>
+                            <div class="stat-group">
+                                <span class="stat-label">Mental Attack (OMCV ${char1.omcv} vs DMCV ${char2.dmcv}):</span><br>
+                                Needs to roll: <strong>${char1HitsChar2Mental}</strong>
+                            </div>
+                        </div>
+
+                        <div class="defensive-stats">
+                            <strong>${char1GoesFirst}${char1.name}'s Stats:</strong><br>
+                            DEX: ${char1.dex} | SPD: ${char1.spd} | Phases: ${char1Phases}<br>
+                            PD: ${char1.pd} | ED: ${char1.ed}<br>
+                            END: ${char1.end} | REC: ${char1.rec}<br>
+                            BODY: ${char1.body} | STUN: ${char1.stun}<br>
+                            RUNNING: ${char1.running}m
+                        </div>
+                    </div>
+
+                    <div style="flex: 1; min-width: 300px;">
+                        <h4>${char2.name} attacking ${char1.name}</h4>
+                        <div class="combat-stats">
+                            <div class="stat-group">
+                                <span class="stat-label">Physical Attack (OCV ${char2.ocv} vs DCV ${char1EffectiveDCV}):</span><br>
+                                Needs to roll: <strong>${char2HitsChar1Physical}</strong><br>
+                                Damage: <strong>${char2Damage}  - ${char1.pd}PD/${char1.ed}ED&nbsp;&nbsp;&nbsp;&nbsp;( ${char1.con} for <i>Stun</i> )</strong>
+                            </div>
+                            <div class="stat-group">
+                                <span class="stat-label">Mental Attack (OMCV ${char2.omcv} vs DMCV ${char1.dmcv}):</span><br>
+                                Needs to roll: <strong>${char2HitsChar1Mental}</strong>
+                            </div>
+                        </div>
+
+                        <div class="defensive-stats">
+                            <strong>${char2GoesFirst}${char2.name}'s Stats:</strong><br>
+                            DEX: ${char2.dex} | SPD: ${char2.spd} | Phases: ${char2Phases}<br>
+                            PD: ${char2.pd} | ED: ${char2.ed}<br>
+                            END: ${char2.end} | REC: ${char2.rec}<br>
+                            BODY: ${char2.body} | STUN: ${char2.stun}<br>
+                            RUNNING: ${char2.running}m
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('comparison-content').innerHTML = resultsHTML;
+            document.getElementById('results').style.display = 'block';
+        }
+
+        function importCharacter(num) {
+            const jsonInput = document.getElementById(`json${num}`).value.trim();
+
+            if (!jsonInput) {
+                alert('Please enter JSON data');
+                return;
+            }
+
+            try {
+                const data = JSON.parse(jsonInput);
+
+                // Define the valid fields and their default values
+                const fields = {
+                    'name': '',
+                    'str': 10,
+                    'dex': 10,
+                    'con': 10,
+                    'ocv': 3,
+                    'dcv': 3,
+                    'dcvbonus': 0,
+                    'omcv': 3,
+                    'dmcv': 3,
+                    'spd': 2,
+                    'pd': 2,
+                    'ed': 2,
+                    'rec': 4,
+                    'end': 20,
+                    'body': 10,
+                    'stun': 20,
+                    'running': 20
+                };
+
+                // Import each field
+                for (const [field, defaultValue] of Object.entries(fields)) {
+                    const element = document.getElementById(`${field}${num}`);
+                    if (element) {
+                        if (data.hasOwnProperty(field)) {
+                            element.value = data[field];
+                        } else if (field !== 'name') {
+                            element.value = defaultValue;
+                        }
+                    }
+                }
+
+                // Auto-update comparison if already displayed
+                if (document.getElementById('results').style.display !== 'none') {
+                    compareCharacters();
+                }
+
+            } catch (error) {
+                alert('Invalid JSON format. Please check your input.\n\nExample format:\n' +
+                      '{"name":"Hero","str":20,"dex":20,"con":15,"ocv":6,"dcv":6,"dcvbonus":2,"omcv":5,"dmcv":5,"spd":2,"pd":8,"ed":8,"rec":10,"end":40,"body":15,"stun":35, "running":12}');
+            }
+        }
+
+        // Auto-update on input change
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => {
+                if (document.getElementById('results').style.display !== 'none') {
+                    compareCharacters();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
